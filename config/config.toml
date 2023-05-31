@@ -1,5 +1,5 @@
 LOGGING_LEVEL = "INFO"
 TESTNET = true  # false = MAINNET
 CHAIN_NAME_FROM = "Ethereum Goerli Testnet"
-CHAIN_NAME_TO = ""
+CHAIN_NAME_TO = "BNB Chain Testnet"
 TOKEN_STANDARD = "ERC721"

@@ -1,7 +1,7 @@
 import tomllib
 
 from bot.better_web3 import Explorer
-from bot.zk_bridge_api import ZkbridgeChain
+from bot.zk_bridge import ZkBridgeChain
 from bot.paths import CONFIG_DIR
 
 CHAINS_TOML = CONFIG_DIR / "chains.toml"
@@ -9,12 +9,12 @@ CHAINS_TOML = CONFIG_DIR / "chains.toml"
 with open(CHAINS_TOML, "rb") as chains_toml:
     chains_data = tomllib.load(chains_toml)
 
-testnet: dict[str: ZkbridgeChain] = dict()
-mainnet: dict[str: ZkbridgeChain] = dict()
+testnet: dict[str: ZkBridgeChain] = dict()
+mainnet: dict[str: ZkBridgeChain] = dict()
 
 for chain_name, chain_data in chains_data["testnet"].items():
     explorer = Explorer(chain_data["explorer"])
-    chain = ZkbridgeChain(
+    chain = ZkBridgeChain(
         name=chain_name,
         rpc=chain_data["RPC"],
         chain_id=chain_data["chain_id"],
@@ -26,7 +26,7 @@ for chain_name, chain_data in chains_data["testnet"].items():
 
 for chain_name, chain_data in chains_data["mainnet"].items():
     explorer = Explorer(chain_data["explorer"])
-    chain = ZkbridgeChain(
+    chain = ZkBridgeChain(
         name=chain_name,
         rpc=chain_data["RPC"],
         chain_id=chain_data["chain_id"],

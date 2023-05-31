@@ -4,14 +4,8 @@ import secrets
 import aiohttp
 
 from bot.image import get_random_image
-from bot.zk_bridge_api.http import (
-    upload_image,
-    get_networks,
-    get_mint_data,
-    check_mint,
-    check_receipt,
-)
-from bot.zk_bridge_api import get_auth_token, ZkbridgeContract
+from bot.zk_bridge import ZkBridgeAPI, ZkBridgeContract
+from bot.better_web3 import sign_message
 from bot.chains import testnet, mainnet
 from bot.logger import logger
 from bot.config import config
@@ -31,39 +25,70 @@ async def main():
         chain_to = chains[config.CHAIN_NAME_TO]
 
         async with aiohttp.ClientSession() as session:
-            for account in accounts:
+            for i, account in enumerate(accounts, start=1):
+                # Создаем экземпляр ZkBridgeAPI (пока без токена авторизации)
+                zk_bridge = ZkBridgeAPI(session)
+
                 # Получаем токен авторизации
-                auth_token = await get_auth_token(session, account)
-                # Создаем случайное изображение, грузим его на сервер и получаем ссылку
+                try:
+                    validation_message = await zk_bridge.get_validation_message(account.address)
+                    signed_message = sign_message(validation_message, account)
+                    await zk_bridge.get_and_set_auth_token(account.address, signed_message)
+                    logger.info(f"[{i}] [{account.address}] Токен авторизации получен")
+                except Exception as e:
+                    logger.error(f"[{i}] [{account.address}] Не удалось получить токен авторизации")
+                    continue
+
+                # Генерируем случайное изображение
                 image = get_random_image()
-                image_url = await upload_image(session, auth_token, image)
-                # Генерируем случайное имя и описание
+                # Грузим изображение на сервер и получаем ссылку
+                try:
+                    image_url = await zk_bridge.upload_image(image)
+                    logger.info(
+                        f"[{i}] [{account.address}]"
+                        f" Изображение сгенерировано и загружено на сервер: {image_url}"
+                    )
+                except Exception as e:
+                    logger.error(f"[{i}] [{account.address}] Не удалось загрузить изображение на сервер")
+                    continue
+
+                # Генерируем случайные имя и описание
                 nft_name, nft_description = (secrets.token_hex(16) for _ in range(2))
-                # Запрашиваем информацию для минта NFT
-                mint_data = await get_mint_data(
-                    session,
-                    auth_token,
-                    image_url,
-                    nft_name,
-                    nft_description,
-                    chain_from.zkbridge_id,
-                    config.TOKEN_STANDARD,
-                )
+                # Запрашиваем информацию для чеканки NFT
+                try:
+                    mint_data = await zk_bridge.get_mint_data(
+                        image_url,
+                        nft_name,
+                        nft_description,
+                        chain_from.zkbridge_id,
+                        config.TOKEN_STANDARD,
+                    )
+                    logger.info(
+                        f"[{i}] [{account.address}]"
+                        f" Информация для чеканки получена"
+                    )
+                except Exception as e:
+                    logger.error(f"[{i}] [{account.address}] Не удалось получить информацию для чеканки")
+                    continue
+
                 # Создаем экземпляр контракта zkBridgeCreator согласно полученной информации о минте
-                zk_bridge_creator = ZkbridgeContract(
+                zk_bridge_creator = ZkBridgeContract(
                     chain_from,
                     mint_data.contract.contract_address,
                     mint_data.contract.abi,
                 )
+
                 # Минтим NFT согласно полученной информации о минте
                 tx = zk_bridge_creator.mint(account, mint_data.token.contract_token_id)
-                # Спустя минуту даем zkBridge информацию о нашей NFT
-                await asyncio.sleep(60)
                 tx_hash = tx.transactionHash.hex()
-                await check_mint(session, auth_token, tx_hash, mint_data.token.id)
-                await check_receipt(session, auth_token, chain_from.zkbridge_id, account.address, tx_hash)
+                logger.info(f"[{i}] [{account.address}] Чеканка NFT. Хеш: {tx_hash}")
 
-                print(tx)
+                # Предоставляем zkBridge информацию о нашей NFT
+                is_minted = await zk_bridge.check_mint(tx_hash, mint_data.token.id)
+                logger.info(f"[{i}] [{account.address}] Чеканка подтверждена: {is_minted}")
+                is_received = await zk_bridge.check_receipt(
+                    chain_from.zkbridge_id, mint_data.contract.contract_address, tx_hash)
+                logger.info(f"[{i}] [{account.address}] Получение NFT подтверждено: {is_received}")
 
 
 if __name__ == '__main__':
