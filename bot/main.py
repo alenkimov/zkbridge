@@ -21,8 +21,8 @@ async def main():
         logger.warning(f"Нет аккаунтов")
     else:
         # Выбранные пользователем сети
-        chain_from = chains[config.CHAIN_NAME_FROM]
-        chain_to = chains[config.CHAIN_NAME_TO]
+        source_chain = chains[config.CHAIN_NAME_FROM]
+        target_chain = chains[config.CHAIN_NAME_TO]
 
         async with aiohttp.ClientSession() as session:
             for i, account in enumerate(accounts, start=1):
@@ -60,7 +60,7 @@ async def main():
                         image_url,
                         nft_name,
                         nft_description,
-                        chain_from.zkbridge_id,
+                        source_chain.zkbridge_id,
                         config.TOKEN_STANDARD,
                     )
                     logger.info(
@@ -73,23 +73,43 @@ async def main():
 
                 # Создаем экземпляр контракта zkBridgeCreator согласно полученной информации о минте
                 zk_bridge_creator = ZkBridgeContract(
-                    chain_from,
+                    source_chain,
                     mint_data.contract.contract_address,
                     mint_data.contract.abi,
                 )
 
                 # Минтим NFT согласно полученной информации о минте
-                tx = zk_bridge_creator.mint(account, mint_data.token.contract_token_id)
-                tx_hash = tx.transactionHash.hex()
-                logger.info(f"[{i}] [{account.address}] Чеканка NFT. Хеш: {tx_hash}")
+                mint_tx = zk_bridge_creator.mint(account, mint_data.token.contract_token_id)
+                mint_tx_hash = mint_tx.transactionHash.hex()
+                logger.info(f"[{i}] [{account.address}] Чеканка NFT. Хеш: {mint_tx_hash}")
 
                 # Предоставляем zkBridge информацию о нашей NFT
-                is_minted = await zk_bridge.check_mint(tx_hash, mint_data.token.id)
+                is_minted = await zk_bridge.check_mint(mint_tx_hash, mint_data.token.id)
                 logger.info(f"[{i}] [{account.address}] Чеканка подтверждена: {is_minted}")
                 is_received = await zk_bridge.check_receipt(
-                    chain_from.zkbridge_id, mint_data.contract.contract_address, tx_hash)
+                    source_chain.zkbridge_id, mint_data.contract.contract_address, mint_tx_hash)
                 logger.info(f"[{i}] [{account.address}] Получение NFT подтверждено: {is_received}")
 
+                # Аппрувим NFT для передачи
+                approve_tx = zk_bridge_creator.approve(
+                    account,
+                    "0x5EaF12A77af42B745869675EfB0dE153Fd46c42c",  # TODO выяснить, откуда берется это адрес
+                    mint_data.token.contract_token_id,
+                )
+                approve_tx_hash = approve_tx.transactionHash.hex()
+                logger.info(f"[{i}] [{account.address}] Approve NFT. Хеш: {approve_tx_hash}")
+
+                # Собираем ордер
+                order_data = await zk_bridge.create_order(
+                    account.address,
+                    account.address,
+                    source_chain.chain_id,
+                    target_chain.chain_id,
+                    approve_tx_hash,
+                    zk_bridge_creator.address,
+                    mint_data.token.contract_token_id,
+                )
+                c = 1
 
 if __name__ == '__main__':
     asyncio.run(main())

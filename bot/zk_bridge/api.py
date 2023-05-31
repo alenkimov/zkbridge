@@ -2,8 +2,8 @@ from typing import ClassVar
 
 from aiohttp import FormData
 
-from bot.http_client import HTTPClient, RouteCreator
-from .models import MintData, ChainData
+from bot.better_http import HTTPClient, RouteCreator
+from .models import MintData, ChainData, OrderData
 from .exceptions import ZkBridgeException
 
 
@@ -120,3 +120,46 @@ class ZkBridgeAPI(HTTPClient):
 
     async def get_and_set_auth_token(self, address: str, signed_message: str):
         self.auth_token = await self.get_auth_token(address, signed_message)
+
+    async def create_order(
+            self,
+            address_from: str,
+            address_to: str,
+            source_chain_id: int,
+            target_chain_id: int,
+            tx_hash: str,
+            contract_address: str,
+            contract_token_id: int,
+    ) -> OrderData:
+        route = ZkBridgeAPI.Route("POST", "/bridge/createOrder")
+        payload = {
+            "from": address_from,
+            "to": address_to,
+            "sourceChainId": source_chain_id,
+            "targetChainId": target_chain_id,
+            "txHash": tx_hash,
+            "contracts": [{"contractAddress": contract_address, "tokenId": contract_token_id}],
+        }
+        headers = self._get_auth_headers()
+        data = await self.request(route, json=payload, headers=headers)
+        return OrderData(**data)
+
+    async def claim_order(self, claim_tx_hash: str, token_id: str):
+        route = ZkBridgeAPI.Route("POST", "/bridge/claimOrder")
+        payload = {
+            "claimHash": claim_tx_hash,
+            "id": token_id,
+        }
+        headers = self._get_auth_headers()
+        await self.request(route, json=payload, headers=headers)
+
+    async def generate(self, tx_hash: str, chain_id: int, *, is_testnet: bool = True):
+        route = ZkBridgeAPI.Route("POST", "/v2/receipt_proof/generate")
+
+        payload = {
+            "tx_hash": tx_hash,
+            "chain_id": chain_id,
+            "testnet": is_testnet,
+        }
+        headers = self._get_auth_headers()
+        await self.request(route, json=payload, headers=headers)

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class NftMetadata(BaseModel):
@@ -96,3 +96,33 @@ class ChainData(BaseModel):
 class AuthToken(BaseModel):
     expire: str
     token: str
+
+
+class OrderDataToken(BaseModel):
+    name: str = Field(..., alias='tokenName')
+    id: int = Field(..., alias='tokenId')
+    amount: int = Field(..., alias='tokenAmount')
+    description: str
+    source_contract_address: str = Field(..., alias='sourceContractAddress')
+    target_contract_address: str or None = Field("", alias='targetContractAddress')
+
+
+class OrderData(BaseModel):
+    tokens: list[OrderDataToken]
+
+    id: str
+    standard: str
+    address_from: str = Field(..., alias='from')
+    address_to: str = Field(..., alias='to')
+
+    recipient_chain: int = Field(..., alias='recipientChain')
+    source_chain_id: int = Field(..., alias='sourceChainId')
+    target_chain_id: int = Field(..., alias='targetChainId')
+    source_chain_name: str = Field(..., alias='sourceChainName')
+    target_chain_name: str = Field(..., alias='targetChainName')
+
+    deposit_hash: str = Field(..., alias='depositHash')
+    claim_hash: str = Field(..., alias='claimHash')
+    bridge_status: int = Field(..., alias='bridgeStatus')
+    deposit_at: str = Field(..., alias='depositAt')
+    claim_confirm_at: str or None = Field("", alias='claimConfirmAt')
