@@ -1,0 +1,5 @@
+LOGGING_LEVEL = "INFO"
+TESTNET = true  # false = MAINNET
+CHAIN_NAME_FROM = "Ethereum Goerli Testnet"
+CHAIN_NAME_TO = ""
+TOKEN_STANDARD = "ERC721"
