@@ -2,6 +2,7 @@ import time
 import json
 import requests
 from typing import Callable
+import re
 
 
 class ExplorerError(RuntimeError):
@@ -29,7 +30,7 @@ class ExplorerAction:
             # stupid throttling
             time.sleep(5)
 
-        r = requests.get(self.module.explorer.url, params=params)
+        r = requests.get(self.module.explorer.api_url, params=params)
         result = r.json()
         if result["status"] != "1":
             raise ExplorerError(result["message"], result["result"])
@@ -51,6 +52,7 @@ class ExplorerModule:
 class Explorer:
     def __init__(self, url, api_key=None) -> None:
         self.url = url
+        self.api_url = self._convert_url(url)
         self.api_key = api_key
 
     def __getattr__(self, module: str) -> ExplorerModule:
@@ -65,3 +67,18 @@ class Explorer:
             )[0]
             abi = json.loads(implementation_info["ABI"])
         return abi
+
+    @staticmethod
+    def _convert_url(url):
+        pattern = r"https?://([\w.-]+)/?"
+        match = re.match(pattern, url)
+
+        if match:
+            domain = match.group(1)
+            converted_url = f"https://api.{domain}/api"
+            return converted_url
+        else:
+            raise ValueError("Wrong explorer URL")
+
+    def get_link_by_txn_hash(self, txn_hash: str):
+        return f"{self.url}/tx/{txn_hash}"

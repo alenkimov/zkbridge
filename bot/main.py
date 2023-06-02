@@ -89,16 +89,17 @@ async def main():
                     continue
 
                 # Создаем экземпляр контракта zkBridgeCreator согласно полученной информации о минте
-                zk_bridge_creator = ZkBridgeCreator(
+                creator = ZkBridgeCreator(
                     mint_data.contract.contract_address,
                     source_chain,
                     abi=mint_data.contract.abi,
                 )
 
                 # Минтим NFT согласно полученной информации о минте
-                mint_tx = zk_bridge_creator.mint(account, mint_data.token.contract_token_id)
+                mint_tx = creator.mint(account, mint_data.token.contract_token_id)
                 mint_tx_hash = mint_tx.transactionHash.hex()
-                logger.info(f"[{i}] [{account.address}] Чеканка NFT. Газ: {mint_tx.gasUsed} Хеш: {mint_tx_hash}")
+                mint_txn_hash_link = creator.chain.explorer.get_link_by_txn_hash(mint_tx_hash)
+                logger.info(f"[{i}] [{account.address}] Чеканка NFT. Газ: {mint_tx.gasUsed} Хеш: {mint_txn_hash_link}")
 
                 # Предоставляем zkBridge информацию о нашей NFT
                 is_minted = await zk_bridge.check_mint(mint_tx_hash, mint_data.token.id)
@@ -111,14 +112,15 @@ async def main():
                 logger.info(f"[{i}] [{account.address}] Получение NFT подтверждено: {is_received}")
 
                 # Аппрувим NFT для передачи
-                approve_tx = zk_bridge_creator.approve(
+                approve_tx = creator.approve(
                     account,
                     # source_bridge_data.address,
                     sender.address,
                     mint_data.token.contract_token_id,
                 )
                 approve_tx_hash = approve_tx.transactionHash.hex()
-                logger.info(f"[{i}] [{account.address}] Approve NFT. Газ: {approve_tx.gasUsed} Хеш: {approve_tx_hash}")
+                approve_txn_hash_link = creator.chain.explorer.get_link_by_txn_hash(approve_tx_hash)
+                logger.info(f"[{i}] [{account.address}] Approve NFT. Газ: {approve_tx.gasUsed} Хеш: {approve_txn_hash_link}")
 
                 # Передача NFT
                 transfer_tx = sender.transfer(
@@ -129,7 +131,8 @@ async def main():
                     account.address,
                 )
                 transfer_tx_hash = transfer_tx.transactionHash.hex()
-                logger.info(f"[{i}] [{account.address}] Трансфер NFT. Газ: {transfer_tx.gasUsed} Хеш: {transfer_tx_hash}")
+                transfer_txn_hash_link = sender.chain.explorer.get_link_by_txn_hash(transfer_tx_hash)
+                logger.info(f"[{i}] [{account.address}] Трансфер NFT. Газ: {transfer_tx.gasUsed} Хеш: {transfer_txn_hash_link}")
 
                 # Собираем ордер
                 order_data = await zk_bridge.create_order(
@@ -138,7 +141,7 @@ async def main():
                     source_chain.chain_id,
                     target_chain.chain_id,
                     approve_tx_hash,
-                    zk_bridge_creator.address,
+                    creator.address,
                     mint_data.token.contract_token_id,
                 )
 
@@ -159,9 +162,10 @@ async def main():
                     claim_data["proof_index"],
                     claim_data["proof_blob"],
                 )
-                claim_tx_hash = transfer_tx.transactionHash.hex()
+                claim_tx_hash = claim_tx.transactionHash.hex()
+                claim_txn_hash_link = receiver.chain.explorer.get_link_by_txn_hash(claim_tx_hash)
                 logger.info(
-                    f"[{i}] [{account.address}] Клейм NFT. Газ: {claim_tx.gasUsed} Хеш: {claim_tx_hash}")
+                    f"[{i}] [{account.address}] Клейм NFT. Газ: {claim_tx.gasUsed} Хеш: {claim_txn_hash_link}")
 
                 c = 1
 

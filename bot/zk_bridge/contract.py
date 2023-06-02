@@ -113,6 +113,7 @@ class ZkBridgeReceiver(Contract):
             {
                 'nonce': nonce,
                 'gas': gas,
+                'gasPrice': self.w3.to_wei(50, 'gwei'),
             }
         )
         signed_tx = self.w3.eth.account.sign_transaction(transaction, private_key=account.key)
