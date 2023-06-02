@@ -1,0 +1,86 @@
+{
+    "bnbt": {
+        "address": "0x1e40CD8569F3c91F5101d54AE01a75574a9ccE60",
+        "order": 1
+    },
+    "bnb": {
+        "address": "0xe9AD444cF80E1d6Ba062A2Dd6f53b740b5F0aa14",
+        "order": 1
+    },
+    "eth": {
+        "address": "0xB2C2Fc86627366f0b9A529e6a3Ea7fe8faCBF386",
+        "order": 2
+    },
+    "gor": {
+        "address": "0x045CcD08a8FB170b069980C7aC761D426A09882a",
+        "order": 2
+    },
+    "arb-goerli": {
+        "address": "0x5e00e10D37d3CB2b9B264926F4Bb94d2Cef63bDB",
+        "order": 3
+    },
+    "arb1": {
+        "address": "0x3a0F7d4a4CAcA465335e3aDf49C66892fee37345",
+        "order": 3
+    },
+    "maticmum": {
+        "address": "0x754f10D7eb1468F48181e929cdf4dFac33A86352",
+        "order": 4
+    },
+    "matic": {
+        "address": "0xa25bE50be65070c2Ad96d5eD639061de31c45e12",
+        "order": 4
+    },
+    "combo_testnet": {
+        "address": "0x2eD78A532C2BfdB8D739F1f27BAD87D5e27CCCd1",
+        "order": 5
+    },
+    "arb-nova": {
+        "address": "0xf7497304AC73c1A52d10f719dd27580a0Db7F932",
+        "order": 7
+    },
+    "fuji": {
+        "address": "0x4825685597cA1Fbe024C05575BE8D11f42690D45",
+        "order": 8
+    },
+    "avax": {
+        "address": "0xB2C2Fc86627366f0b9A529e6a3Ea7fe8faCBF386",
+        "order": 8
+    },
+    "tftm": {
+        "address": "0x27137Feb0a6AC1dF5C05175a52E366d1835a3D57",
+        "order": 9
+    },
+    "ftm": {
+        "address": "0x3a0F7d4a4CAcA465335e3aDf49C66892fee37345",
+        "order": 9
+    },
+    "ogor": {
+        "address": "0x8222bc4Acaf26eC94592AA69dA21AF72CC91196C",
+        "order": 10
+    },
+    "oeth": {
+        "address": "0xB2C2Fc86627366f0b9A529e6a3Ea7fe8faCBF386",
+        "order": 10
+    },
+    "mbase": {
+        "address": "0x6AFeaB78BbCBa0155EF6EAa149baDf09d2c9B52b",
+        "order": 11
+    },
+    "mbeam": {
+        "address": "0x9aC5022d8Efce9fE3AC1Ab48B34A83eF9e053281",
+        "order": 11
+    },
+    "gno": {
+        "address": "0xB2C2Fc86627366f0b9A529e6a3Ea7fe8faCBF386",
+        "order": 12
+    },
+    "metis-andromeda": {
+        "address": "0x6C9fdb67568A38250500EC971658917ddD3c4327",
+        "order": 13
+    },
+    "metis_testnet": {
+        "address": "0x9caB8C5625b56b3d24AcB060DdB29b80AcAe507D",
+        "order": 13
+    }
+}

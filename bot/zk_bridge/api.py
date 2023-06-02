@@ -153,13 +153,20 @@ class ZkBridgeAPI(HTTPClient):
         headers = self._get_auth_headers()
         await self.request(route, json=payload, headers=headers)
 
-    async def generate(self, tx_hash: str, chain_id: int, *, is_testnet: bool = True):
+    async def generate(
+            self,
+            transfer_tx_hash: str,
+            source_app_id: int,
+            *,
+            is_testnet: bool = True,
+    ) -> dict:
         route = ZkBridgeAPI.Route("POST", "/v2/receipt_proof/generate")
 
         payload = {
-            "tx_hash": tx_hash,
-            "chain_id": chain_id,
+            "tx_hash": transfer_tx_hash,
+            "chain_id": source_app_id,
             "testnet": is_testnet,
         }
         headers = self._get_auth_headers()
-        await self.request(route, json=payload, headers=headers)
+        data = await self.request(route, json=payload, headers=headers)
+        return data

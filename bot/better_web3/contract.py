@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class Contract:
-    def __init__(self, chain: "Chain", address, abi):
+    def __init__(self, address, chain: "Chain", *, abi):
         self.address = to_checksum_address(address)
         self.chain = chain
         self.abi = abi

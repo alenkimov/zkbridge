@@ -93,11 +93,6 @@ class ChainData(BaseModel):
         return chain_data
 
 
-class AuthToken(BaseModel):
-    expire: str
-    token: str
-
-
 class OrderDataToken(BaseModel):
     name: str = Field(..., alias='tokenName')
     id: int = Field(..., alias='tokenId')

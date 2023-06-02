@@ -1,5 +1,5 @@
 LOGGING_LEVEL = "INFO"
-TESTNET = true
-CHAIN_NAME_FROM = "Ethereum Goerli Testnet"
-CHAIN_NAME_TO = "Polygon Testnet"
+NET_MODE = "testnet"
+SOURCE_CHAIN_NAME = "Ethereum Goerli Testnet"
+TARGET_CHAIN_NAME = "Polygon Testnet"
 TOKEN_STANDARD = "ERC721"

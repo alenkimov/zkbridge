@@ -1,0 +1,45 @@
+{
+    "eth": {
+        "address": "0x1e40CD8569F3c91F5101d54AE01a75574a9ccE60",
+        "estimateFinalTime": "2 minutes 30 seconds",
+        "order": 2.1,
+        "confirmBlockNumber": 12
+    },
+    "gor": {
+        "address": "0x5EaF12A77af42B745869675EfB0dE153Fd46c42c",
+        "order": 2.2,
+        "confirmBlockNumber": 15
+    },
+    "bnb": {
+        "address": "0xE09828f0DA805523878Be66EA2a70240d312001e",
+        "estimateFinalTime": "50 seconds",
+        "order": 1.2,
+        "confirmBlockNumber": 15
+    },
+    "bnbt": {
+        "address": "0x5b2d3EcA3D64CE47A675317D1D290D9B8E87E8Dc",
+        "order": 1.1,
+        "confirmBlockNumber": 15
+    },
+    "matic": {
+        "address": "0x2E953a70C37E8CB4553DAe1F5760128237c8820D",
+        "order": 3.1,
+        "estimateFinalTime": "30 seconds",
+        "confirmBlockNumber": 15
+    },
+    "maticmum": {
+        "address": "0xC2EF949CEbaD8D2beAe29440d1b4251879Cd4978",
+        "order": 3.1,
+        "confirmBlockNumber": 15
+    },
+    "fuji": {
+        "address": "0xd9249E3D614dAa3E2e94aEAEe5F21f94E4AdeC9a",
+        "order": 4.1,
+        "confirmBlockNumber": 15
+    },
+    "tftm": {
+        "address": "0x35B0AD80dF8b29AF65CAc60Df30D5604D37FEc29",
+        "order": 5.1,
+        "confirmBlockNumber": 15
+    }
+}

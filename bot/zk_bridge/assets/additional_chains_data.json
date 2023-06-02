@@ -1,0 +1,36 @@
+{
+  "mainnet": {
+    "Ethereum": {
+      "id": "628ee590c2c552fd1a61a7a8",
+      "app_id": 2,
+      "short_name": "eth"
+    },
+    "BNB Chain": {
+      "id": "628eeca4c2c552fd1a61a7a9",
+      "app_id": 3,
+      "short_name": "bnb"
+    }
+  },
+  "testnet": {
+    "Ethereum Goerli Testnet": {
+      "id": "627f65274c42972511443130",
+      "app_id": 102,
+      "short_name": "gor"
+    },
+    "BNB Chain Testnet": {
+      "id": "632971cd3f606cf1601f7eab",
+      "app_id": 103,
+      "short_name": "bnbt"
+    },
+    "Polygon Testnet": {
+      "id": "6329724a3f606cf1601f7eac",
+      "app_id": 104,
+      "short_name": "maticmum"
+    },
+    "Fantom Testnet": {
+      "id": "6226df2898944273d0703789",
+      "app_id": 106,
+      "short_name": "tftm"
+    }
+  }
+}
