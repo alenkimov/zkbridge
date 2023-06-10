@@ -16,6 +16,7 @@ web3 = "^6.4.0"
 pydantic = "^1.10.8"
 coincurve = "^18.0.0"
 better_web3 = {path = "H:/Мой диск/Projects/Python/better_web3", develop = true}
+dearpygui = "^1.9.1"
 
 
 [build-system]

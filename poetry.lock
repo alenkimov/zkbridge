@@ -626,6 +626,33 @@ toolz = ">=0.8.0"
 cython = ["cython"]
 
 [[package]]
+name = "dearpygui"
+version = "1.9.1"
+description = "DearPyGui: A simple Python GUI Toolkit"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "dearpygui-1.9.1-cp310-cp310-macosx_10_6_x86_64.whl", hash = "sha256:055d3399bdf0cfa03a06ceed2a213c304f7eea314bc57032d9a06b1e8f6ec400"},
+    {file = "dearpygui-1.9.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:0c7ce1000004078f4d6ceb26b99df17118ae6d412aba60d0b4b217588d3cbfc7"},
+    {file = "dearpygui-1.9.1-cp310-cp310-manylinux1_x86_64.whl", hash = "sha256:5a006fe44590c362a03fe451237074ed99563d0334f1bc6ec6c7d498eca41e46"},
+    {file = "dearpygui-1.9.1-cp310-cp310-win_amd64.whl", hash = "sha256:2982e456dbe2be5bf7e398af6e1f9ea16d8bfdc90e00d83b9c17c834d210cb7a"},
+    {file = "dearpygui-1.9.1-cp311-cp311-macosx_10_6_x86_64.whl", hash = "sha256:8a031bcd0e58083dd0f48ada33ec86a2379f47fc56d8e199aef481237ceda774"},
+    {file = "dearpygui-1.9.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:c16181743f79b2d2809d24e696a5e5144135ad61ee10072ce1430bc5724ee5c1"},
+    {file = "dearpygui-1.9.1-cp311-cp311-manylinux1_x86_64.whl", hash = "sha256:64cba064a5b6dac96abd8fb88fdb61842ca75668bdca364fbd52b9151adc6eb9"},
+    {file = "dearpygui-1.9.1-cp311-cp311-win_amd64.whl", hash = "sha256:b687bfa9e5dd34cb84e144ad307ec4d0fa8ad7c43f37a0cbd68d018a93f0d240"},
+    {file = "dearpygui-1.9.1-cp37-cp37m-macosx_10_6_x86_64.whl", hash = "sha256:fa37c0f95a202fefba86e0f9e422357e24297f65554c06d8cf68b71b3671f278"},
+    {file = "dearpygui-1.9.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:10310d34ef998cc201b13915a8742d6a69bf32a17c999bea2abfdf12a14bce31"},
+    {file = "dearpygui-1.9.1-cp37-cp37m-win_amd64.whl", hash = "sha256:1a05cc0adeb9cba19181eafe2418c1b6e2004624b350a619c0e7b3c92ff0966c"},
+    {file = "dearpygui-1.9.1-cp38-cp38-macosx_10_6_x86_64.whl", hash = "sha256:d6d8fc7c6b8d97e972d4343b871ea789da39d89c9f7a5bb7bb106b4053fb1c69"},
+    {file = "dearpygui-1.9.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:1a308bc9bc21830a5c4d3f205559741a29bc191283dfa4ed5d24ae23a1e93dc2"},
+    {file = "dearpygui-1.9.1-cp38-cp38-win_amd64.whl", hash = "sha256:23b954f304bcf63e0c9aa5c16344f1d44e034ca5c6e0764e05bd1c0b0bd10173"},
+    {file = "dearpygui-1.9.1-cp39-cp39-macosx_10_6_x86_64.whl", hash = "sha256:069b557fd20cbbf0b13a0c41d16366eb7adb1c895fff1cd6653e472acee5ef5c"},
+    {file = "dearpygui-1.9.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:7646f0b80e0b94acd1e0232f32d5fe67b31d0e7b1921fb4947ee551d8b90ba86"},
+    {file = "dearpygui-1.9.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:7394cba85ef6495091e7806c9a9b7ae03463d77a84b507329dc2d5a42e6581c7"},
+    {file = "dearpygui-1.9.1-cp39-cp39-win_amd64.whl", hash = "sha256:caebf2e331a8d9f945806aaa2cd8a308cb2712c11b1484aee967ad031d79e0d1"},
+]
+
+[[package]]
 name = "eth-abi"
 version = "4.0.0"
 description = "eth_abi: Python utilities for working with Ethereum ABI definitions, especially encoding and decoding"
@@ -1836,4 +1863,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "e50d06c21bde84ad6d81c3f33ee7bd1df066d2d33dab50c139ec5019c6ed0afc"
+content-hash = "2869141ef78ded3ea1e371c24b8525afe5e77f52ad9016c84a7d823827b396b8"

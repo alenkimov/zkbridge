@@ -1,5 +1,6 @@
 import asyncio
 import secrets
+from typing import Iterable
 
 import aiohttp
 from better_web3 import Chain
@@ -9,18 +10,16 @@ from better_web3.utils import sign_message, estimate_gas
 from web3.contract.contract import ContractFunction
 
 from bot.utils import get_random_image
-from bot.zk_bridge.chains import chains
+from bot.chains import chains
 from bot.zk_bridge import (
     ZkBridgeAPI,
     ZkBridgeCreator,
     receivers,
     senders,
     ADDITIONAL_DATA,
-    TOKEN_STANDARDS,
 )
 from bot.logger import logger
-from bot.config import config
-from bot.input import load_accounts
+from bot.types_ import NetMode, Standard
 
 
 async def execute_transaction(
@@ -39,16 +38,14 @@ async def execute_transaction(
     return tx_hash
 
 
-async def main():
-    accounts = load_accounts()
-    if not accounts:
-        logger.warning("No accounts found")
-        return
-
-    net_mode = config.NET_MODE
+async def bridge(
+        accounts: Iterable[LocalAccount],
+        net_mode: NetMode,
+        source_chain_name: str,
+        target_chain_name: str,
+        standard: Standard
+):
     is_testnet = net_mode == "testnet"
-    source_chain_name = config.SOURCE_CHAIN_NAME
-    target_chain_name = config.TARGET_CHAIN_NAME
 
     source_chain = chains[net_mode][source_chain_name]
     target_chain = chains[net_mode][target_chain_name]
@@ -91,7 +88,7 @@ async def main():
                     nft_name,
                     nft_description,
                     source_additional_chain_data["id"],
-                    config.TOKEN_STANDARD,
+                    standard,
                 )
                 logger.info(f"[{i}] [{account.address}] Mint data obtained")
             except Exception as e:
@@ -170,7 +167,3 @@ async def main():
                 ),
                 account,
             )
-
-
-if __name__ == '__main__':
-    asyncio.run(main())

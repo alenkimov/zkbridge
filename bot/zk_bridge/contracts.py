@@ -1,7 +1,7 @@
-from .chains import chains
 from .contract import ZkBridgeSender, ZkBridgeReceiver
-from .assets import RECEIVERS_DATA, SENDERS_DATA, ADDITIONAL_DATA
+from .config import RECEIVERS_DATA, SENDERS_DATA, ADDITIONAL_DATA
 
+from bot.chains import chains
 
 receivers: dict[str: dict[str: ZkBridgeReceiver]] = dict()
 senders: dict[str: dict[str: ZkBridgeSender]] = dict()

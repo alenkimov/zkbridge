@@ -1,6 +1,6 @@
 from better_web3 import Chain, Explorer, NativeToken, GasStation
 
-from .assets import CHAINS_DATA
+from bot.config import CHAINS_DATA
 
 
 chains: dict[str: dict[str: Chain]] = dict()

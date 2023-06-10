@@ -1,0 +1,3 @@
+# TOKEN_STANDARDS = ("ERC721", "ERC1155")
+TOKEN_STANDARDS = ("ERC721", )
+NET_MODES = ("mainnet", "testnet")

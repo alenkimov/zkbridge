@@ -1,8 +1,7 @@
 from .contract import ZkBridgeCreator, ZkBridgeSender, ZkBridgeReceiver
 from .api import ZkBridgeAPI
-from .assets import ADDITIONAL_DATA
+from .config import ADDITIONAL_DATA
 from .contracts import receivers, senders
-from .constants import TOKEN_STANDARDS
 
 __all__ = [
     "ZkBridgeCreator",
@@ -12,5 +11,4 @@ __all__ = [
     "receivers",
     "senders",
     "ADDITIONAL_DATA",
-    "TOKEN_STANDARDS",
 ]

@@ -1,6 +1,5 @@
-import asyncio
-
-from bot.main import main
+from bot.gui import App
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    app = App()
+    app.launch()

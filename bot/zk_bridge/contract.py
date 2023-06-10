@@ -2,7 +2,7 @@ from better_web3.contract import Contract
 from eth_typing import ChecksumAddress
 from web3.contract.contract import ContractFunction
 
-from .assets import SENDER_ABI, RECEIVER_ABI
+from .abi import SENDER_ABI, RECEIVER_ABI
 
 
 class ZkBridgeCreator(Contract):
