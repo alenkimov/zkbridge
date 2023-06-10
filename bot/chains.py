@@ -1,5 +1,6 @@
 from better_web3 import Chain, Explorer, NativeToken, GasStation
 
+from bot.types_ import NetMode
 from bot.config import CHAINS_DATA
 
 
@@ -18,3 +19,7 @@ for net_mode, name_to_chain_data in CHAINS_DATA.items():
             chain.gas_station = GasStation(chain_data["gas_station_url"])
         data.update({chain_name: chain})
     chains.update({net_mode: data})
+
+
+def get_chain_names(net_mode: NetMode) -> tuple[str]:
+    return tuple([str(chain_name) for chain_name in chains[net_mode].keys()])

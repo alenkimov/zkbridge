@@ -1,5 +1,4 @@
-from bot.gui import App
+from bot.gui import launch
 
 if __name__ == '__main__':
-    app = App()
-    app.launch()
+    launch()

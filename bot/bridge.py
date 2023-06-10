@@ -19,7 +19,7 @@ from bot.zk_bridge import (
     ADDITIONAL_DATA,
 )
 from bot.logger import logger
-from bot.types_ import NetMode, Standard
+from bot.types_ import NetMode, TokenStandard
 
 
 async def execute_transaction(
@@ -43,7 +43,7 @@ async def bridge(
         net_mode: NetMode,
         source_chain_name: str,
         target_chain_name: str,
-        standard: Standard
+        standard: TokenStandard
 ):
     is_testnet = net_mode == "testnet"
 
