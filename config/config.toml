@@ -1,5 +1,5 @@
 LOGGING_LEVEL = "INFO"
 NET_MODE = "testnet"
-SOURCE_CHAIN_NAME = "Ethereum Goerli Testnet"
+SOURCE_CHAIN_NAME = "BNB Chain Testnet"
 TARGET_CHAIN_NAME = "Polygon Testnet"
 TOKEN_STANDARD = "ERC721"

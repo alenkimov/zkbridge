@@ -1,2 +1,2 @@
-poetry update
+poetry install
 pause

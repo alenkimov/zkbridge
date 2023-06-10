@@ -22,7 +22,7 @@
     ```
   - Установите требуемые библиотеки следующей командой или запуском файла `install-libraries.bat`:
     ```bash
-    poetry update
+    poetry install
     ```
   - Запустите скрипт следующей командой или запуском файла `start.bat`:
     ```bash
@@ -59,7 +59,7 @@ cd zk_nft_bridge
 ```
 - Установите требуемые библиотеки:
 ```bash
-poetry update
+poetry install
 ```
 - Запустите скрипт:
 ```bash
