@@ -2,6 +2,7 @@ import tomllib
 import json
 import io
 from pathlib import Path
+from typing import Iterable
 
 import numpy
 from PIL import Image
@@ -12,14 +13,27 @@ def to_json(obj) -> str:
 
 
 def rewrite_json(filepath: Path, data):
-    with open(filepath, "w") as f:
-        json.dump(data, f, indent=4)
+    with open(filepath, "w") as file:
+        json.dump(data, file, indent=4)
 
 
 def load_json(filepath: Path) -> dict:
     if filepath.exists():
         with open(filepath, "r") as file:
             return json.load(file)
+    else:
+        raise FileNotFoundError(filepath)
+
+
+def rewrite_lines(filepath: Path, lines: Iterable[str]):
+    with open(filepath, "w") as file:
+        file.write("\n".join(lines))
+
+
+def load_lines(filepath: Path) -> list[str]:
+    if filepath.exists():
+        with open(filepath, "r") as file:
+            return [line for line in file.readlines() if line != "\n"]
     else:
         raise FileNotFoundError(filepath)
 

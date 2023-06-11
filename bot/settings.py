@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from bot.chains import get_chain_names
+from bot.chains import get_chain_names, chains
 from bot.paths import SETTINGS_DIR
 from bot.types_ import NetMode, TokenStandard
 from bot.utils import load_json, rewrite_json

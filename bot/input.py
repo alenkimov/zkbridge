@@ -1,28 +1,32 @@
-from pathlib import Path
+from typing import Iterable
 
 from eth_account.account import LocalAccount, Account
 
 from bot.paths import INPUT_DIR
-from bot.logger import logger
+from bot.utils import load_lines, rewrite_lines
 
 
-if not INPUT_DIR.exists():
-    INPUT_DIR.mkdir()
-    logger.info(f"Создал папку для входных данных {INPUT_DIR}")
-
-
+INPUT_DIR.mkdir(exist_ok=True)
 PRIVATE_KEYS_TXT = INPUT_DIR / "private_keys.txt"
 
 
-def _load_accounts(filepath: Path) -> set[LocalAccount]:
-    if not filepath.exists():
-        with open(filepath, "w"):
-            pass
-        logger.info(f"Создал файл {filepath}")
-    with open(filepath, "r") as file:
-        accounts: set[LocalAccount] = {Account.from_key(key.strip()) for key in file.readlines() if key != "\n"}
-    return accounts
+def load_private_keys() -> set[str]:
+    """
+    Загружает приватные ключи из файла.
+    Если файл не существует, создает новый пустой файл.
+    """
+    if not PRIVATE_KEYS_TXT.exists():
+        PRIVATE_KEYS_TXT.touch()
+    return set(load_lines(PRIVATE_KEYS_TXT))
 
 
-def load_accounts() -> set[LocalAccount]:
-    return _load_accounts(PRIVATE_KEYS_TXT)
+def rewrite_accounts(accounts: Iterable[LocalAccount]):
+    private_keys = [account.key.hex() for account in accounts]
+    rewrite_lines(PRIVATE_KEYS_TXT, private_keys)
+
+
+def load_accounts() -> list[LocalAccount]:
+    return [Account.from_key(key.strip()) for key in load_private_keys()]
+
+
+accounts = load_accounts()

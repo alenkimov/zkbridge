@@ -22,7 +22,7 @@ from bot.logger import logger
 from bot.types_ import NetMode, TokenStandard
 
 
-async def execute_transaction(
+def execute_transaction(
         log_message: str,
         chain: Chain,
         fn: ContractFunction,
@@ -102,7 +102,7 @@ async def bridge(
                 mint_data.contract.abi,
             )
 
-            mint_tx_hash = await execute_transaction(
+            mint_tx_hash = execute_transaction(
                 f"[{i}] [{account.address}] Mint NFT",
                 source_chain,
                 creator.mint_function(account.address, mint_data.token.contract_token_id),
@@ -119,14 +119,14 @@ async def bridge(
             )
             logger.info(f"[{i}] [{account.address}] NFT receipt confirmed: {is_received}")
 
-            approve_tx_hash = await execute_transaction(
+            approve_tx_hash = execute_transaction(
                 f"[{i}] [{account.address}] Approve NFT",
                 source_chain,
                 creator.approve_function(sender.address, mint_data.token.contract_token_id),
                 account,
             )
 
-            transfer_tx_hash = await execute_transaction(
+            transfer_tx_hash = execute_transaction(
                 f"[{i}] [{account.address}] Transfer NFT",
                 source_chain,
                 sender.transfer_function(
@@ -156,7 +156,7 @@ async def bridge(
 
             await asyncio.sleep(60)
 
-            await execute_transaction(
+            execute_transaction(
                 f"[{i}] [{account.address}] Claim NFT",
                 target_chain,
                 receiver.claim_function(
