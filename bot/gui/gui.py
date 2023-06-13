@@ -7,6 +7,7 @@ from .wallets_tab import add_wallets_tab
 from .chains_tab import add_chains_tab
 from .bridge_tab import add_zkbridge_tab
 from .menu_bar import add_menu_bar
+from .messager_tab import add_messanger_tab
 
 
 dpg.create_context()
@@ -18,6 +19,7 @@ def change_net_mode(_, app_data, user_data):
     chains_tab.reload_table()
     wallets_tab.reload_table()
     zkbridge_tab.reload_chains()
+    messanger_tab.reload_menu()
 
 
 with dpg.window() as primary_window:
@@ -35,6 +37,7 @@ with dpg.window() as primary_window:
         chains_tab = add_chains_tab()
         wallets_tab = add_wallets_tab()
         zkbridge_tab = add_zkbridge_tab()
+        messanger_tab = add_messanger_tab()
 
 
 def launch():

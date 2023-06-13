@@ -2,14 +2,13 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Literal
 
 from loguru import logger
 
-from bot.config import config
-from bot.paths import LOG_DIR
 
+LoggingLevel = Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
 
-LOG_DIR.mkdir(exist_ok=True)
 FILE_LOG_FORMAT = "<white>{time:HH:mm:ss}</white> | <level>{level: <8}</level> | <white>{message}</white>"
 CONSOLE_LOG_FORMAT = "<white>{time:HH:mm:ss}</white> | <level>{level: <8}</level> | <white>{message}</white>"
 
@@ -31,13 +30,11 @@ class InterceptHandler(logging.Handler):
         logger_opt.log(self._get_level(record), record.getMessage())
 
 
-def setup(level="DEBUG"):
+def setup_logger(log_dir: Path, level: LoggingLevel = "DEBUG"):
+    log_dir.mkdir(exist_ok=True)
     logger.remove()
     log_file_name = f"{datetime.now().strftime('%d-%m-%Y')}.log"
-    log_file_path = Path(LOG_DIR, log_file_name)
+    log_file_path = Path(log_dir, log_file_name)
     logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO)
     logger.add(log_file_path, format=FILE_LOG_FORMAT, level=level, rotation='1 day')
     logger.add(sys.stderr, colorize=True, format=CONSOLE_LOG_FORMAT, level=level)
-
-
-setup(config.LOGGING_LEVEL)

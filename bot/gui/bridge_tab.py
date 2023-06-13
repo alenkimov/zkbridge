@@ -2,13 +2,13 @@ import asyncio
 
 import dearpygui.dearpygui as dpg
 
-from bot.bridge import bridge as _bridge
-from bot.chains import get_chain_names
-from bot.constants import TOKEN_STANDARDS
+from bot.scripts import mint_and_bridge
 from bot.types_ import NetMode
 from bot.settings import settings
 from bot.input import accounts
 from bot.logger import logger
+from bot.config import get_bridge_chain_names, config
+
 from .log_window import add_log_child_window
 
 
@@ -19,49 +19,54 @@ def add_zkbridge_tab():
 class zkBridgeTab:
     def __init__(self):
         self.tag = dpg.generate_uuid()
-        self.chains_buttons_group = dpg.generate_uuid()
-        self.bridge_button = dpg.generate_uuid()
+        self.interaction_menu = dpg.generate_uuid()
+        self.start_button = dpg.generate_uuid()
 
         with dpg.tab(tag=self.tag, label="zkBridge"):
             with dpg.group(horizontal=True):
                 dpg.add_text("Token standard")
                 dpg.add_radio_button(
-                    TOKEN_STANDARDS,
+                    config.TOKEN_STANDARDS,
                     default_value=settings.token_standard,
                     callback=lambda s, d: settings.__setattr__("token_standard", d),
                     horizontal=True,
                 )
-            dpg.add_text("Choose source and target chains:", wrap=0)
-            with dpg.group(label="Choose the chains", horizontal=True, tag=self.chains_buttons_group):
+            with dpg.group(tag=self.interaction_menu):
                 self.reload_chains()
-            dpg.add_button(label="MINT and BRIDGE", tag=self.bridge_button, callback=self.bridge)
+
             add_log_child_window()
 
     def _reload_chains(self, net_mode: NetMode):
-        dpg.delete_item(self.chains_buttons_group, children_only=True)
+        dpg.delete_item(self.interaction_menu, children_only=True)
 
-        chain_names = get_chain_names(net_mode)
-        dpg.add_radio_button(
-            chain_names,
-            parent=self.chains_buttons_group,
-            default_value=settings.source_chain_name,
-            callback=lambda s, d: settings.__setattr__("source_chain_name", d),
-        )
-        dpg.add_radio_button(
-            chain_names,
-            parent=self.chains_buttons_group,
-            default_value=settings.target_chain_name,
-            callback=lambda s, d: settings.__setattr__("target_chain_name", d),
-        )
+        chain_names = get_bridge_chain_names(net_mode)
+
+        with dpg.group(parent=self.interaction_menu):
+            if chain_names:
+                dpg.add_text("Choose source and target chains:", wrap=0)
+                with dpg.group(horizontal=True):
+                    dpg.add_radio_button(
+                        chain_names,
+                        default_value=settings.bridge.source_chain_name,
+                        callback=lambda s, d: settings.bridge.__setattr__("source_chain_name", d),
+                    )
+                    dpg.add_radio_button(
+                        chain_names,
+                        default_value=settings.bridge.target_chain_name,
+                        callback=lambda s, d: settings.bridge.__setattr__("target_chain_name", d),
+                    )
+                dpg.add_button(label="MINT and BRIDGE", tag=self.start_button, callback=self.bridge)
+            else:
+                dpg.add_text("There is no chains to bridge", wrap=0)
 
     def reload_chains(self):
         self._reload_chains(settings.net_mode)
 
     def bridge(self):
-        dpg.disable_item(self.bridge_button)
+        dpg.disable_item(self.start_button)
 
         warnings = []
-        if settings.source_chain_name == settings.target_chain_name:
+        if settings.bridge.source_chain_name == settings.bridge.target_chain_name:
             warnings.append("The same chains")
         if not accounts:
             warnings.append("No accounts found")
@@ -70,9 +75,10 @@ class zkBridgeTab:
             for warning_msg in warnings:
                 logger.warning(warning_msg)
         else:
-            dpg.configure_item(self.bridge_button, label="BRIDGING...")
-            asyncio.run(_bridge(accounts, settings.net_mode, settings.source_chain_name,
-                                settings.target_chain_name, settings.token_standard))
+            dpg.configure_item(self.start_button, label="BRIDGING...")
+            asyncio.run(mint_and_bridge(
+                accounts, settings.net_mode, settings.bridge.source_chain_name,
+                settings.bridge.target_chain_name, settings.token_standard))
 
-        dpg.enable_item(self.bridge_button)
-        dpg.configure_item(self.bridge_button, label="MINT and BRIDGE")
+        dpg.enable_item(self.start_button)
+        dpg.configure_item(self.start_button, label="MINT and BRIDGE")

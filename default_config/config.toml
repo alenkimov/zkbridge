@@ -1,1 +1,11 @@
 LOGGING_LEVEL = "INFO"
+
+TOKEN_STANDARDS = ["ERC721"]
+
+[BRIDGE_CHAINS]
+MAINNET = ["Ethereum", "BNB Chain", "Polygon"]
+TESTNET = ["Ethereum Goerli Testnet", "BNB Chain Testnet", "Polygon Testnet"]
+
+[MESSENGER_CHAINS]
+MAINNET = ["Ethereum", "BNB Chain", "Polygon"]
+TESTNET = []

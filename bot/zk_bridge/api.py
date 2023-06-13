@@ -1,4 +1,6 @@
 from typing import ClassVar
+from random import randint
+import time
 
 from aiohttp import FormData
 
@@ -170,3 +172,41 @@ class ZkBridgeAPI(HTTPClient):
         headers = self._get_auth_headers()
         data = await self.request(route, json=payload, headers=headers)
         return data
+
+    async def profile(self):
+        route = ZkBridgeAPI.Route("GET", "/user/profile")
+        headers = self._get_auth_headers()
+        data = await self.request(route, headers=headers)
+        return data
+
+    async def msg(
+            self,
+            message: str,
+            send_contract_address: str,
+            receiver_address: str,
+            sender_address: str,
+            receiver_app_id: int,
+            sender_app_id: int,
+            sender_tx_hash: str,
+            send_timestamp: int = None,
+            sequence: int = None,
+            receiver_domain_name: str = "",
+
+    ):
+        route = ZkBridgeAPI.Route("POST", "/msg")
+
+        payload = {
+            "message": message,
+            "mailSenderAddress": send_contract_address,
+            "receiverAddress": receiver_address,
+            "receiverChainId": receiver_app_id,
+            "sendTimestamp": send_timestamp or time.time(),
+            "senderAddress": sender_address,
+            "senderChainId": sender_app_id,
+            "senderTxHash": sender_tx_hash,
+            "sequence": sequence or randint(5000, 9999),
+            "receiverDomainName": receiver_domain_name,
+        }
+
+        headers = self._get_auth_headers()
+        await self.request(route, json=payload, headers=headers)

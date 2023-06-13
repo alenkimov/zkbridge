@@ -1,11 +1,25 @@
-import tomllib
-import json
 import io
+import json
+import shutil
+import tomllib
 from pathlib import Path
 from typing import Iterable
 
 import numpy
 from PIL import Image
+from faker import Faker
+
+fake = Faker()
+
+
+def generate_simple_sentence():
+    return fake.sentence(nb_words=3)
+
+
+def copy_file(source_path: Path, destination_path: Path):
+    if destination_path.exists():
+        return
+    shutil.copy2(str(source_path), str(destination_path))
 
 
 def to_json(obj) -> str:

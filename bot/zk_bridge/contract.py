@@ -2,7 +2,7 @@ from better_web3.contract import Contract
 from eth_typing import ChecksumAddress
 from web3.contract.contract import ContractFunction
 
-from .abi import SENDER_ABI, RECEIVER_ABI
+from .abi import SENDER_ABI, RECEIVER_ABI, MAILER_ABI
 
 
 class ZkBridgeCreator(Contract):
@@ -58,3 +58,34 @@ class ZkBridgeReceiver(Contract):
         """
         return self.functions.validateTransactionProof(
             source_app_id, source_deposit_hash, log_index, mpt_proof)
+
+
+class LzMailer(Contract):
+    def __init__(self, *args, abi=MAILER_ABI, **kwargs):
+        super().__init__(*args, abi=abi, **kwargs)
+
+    def send_message(
+            self,
+            target_app_id: int,
+            receive_contract_address: str,
+            receive_layer_zero_chain_id: int,
+            layer_zero_receive_contract_address: str,
+            recipient_address: str,
+            message: str,
+            native_fee: int = 0,
+    ) -> ContractFunction:
+        """
+        sendMessage
+        ```
+        0	dstChainId	 uint16	    3
+        1	dstAddress	 address	0xA98163227B85CcC765295Ce5C18E8aAD663De147
+        2	lzChainId	 uint16	    102
+        3	lzDstAddress address	0x39dad2E89a213626a99Ae09b808b4A79c0d3EC16
+        4	nativeFee	 uint256	0
+        5	recipient	 address	0xRECIPIENT_ADDRESS
+        6	message      string	    Embrace the future of cross-chain interoperability on zkBridge!
+        ```
+        """
+        return self.functions.sendMessage(
+            target_app_id, receive_contract_address, receive_layer_zero_chain_id,
+            layer_zero_receive_contract_address, native_fee, recipient_address, message)
