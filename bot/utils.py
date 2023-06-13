@@ -47,7 +47,7 @@ def rewrite_lines(filepath: Path, lines: Iterable[str]):
 def load_lines(filepath: Path) -> list[str]:
     if filepath.exists():
         with open(filepath, "r") as file:
-            return [line for line in file.readlines() if line != "\n"]
+            return [line.strip() for line in file.readlines() if line != "\n"]
     else:
         raise FileNotFoundError(filepath)
 

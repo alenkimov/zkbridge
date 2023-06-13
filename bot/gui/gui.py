@@ -3,21 +3,21 @@ import dearpygui.dearpygui as dpg
 from bot.constants import NET_MODES
 from bot.paths import SETTINGS_DIR
 from bot.settings import settings
-from .wallets_tab import add_wallets_tab
-from .chains_tab import add_chains_tab
-from .bridge_tab import add_zkbridge_tab
+from .tabs import add_wallets_tab, add_messanger_tab, add_zkbridge_tab, add_chains_tab
 from .menu_bar import add_menu_bar
-from .messager_tab import add_messanger_tab
+
+
+INIT_FILE = SETTINGS_DIR / "dpg.ini"
 
 
 dpg.create_context()
-dpg.configure_app(init_file=SETTINGS_DIR / "gui.ini")
+dpg.configure_app(init_file=INIT_FILE)
 
 
 def change_net_mode(_, app_data, user_data):
     settings.net_mode = app_data
     chains_tab.reload_table()
-    wallets_tab.reload_table()
+    wallets_tab.rebuild_table()
     zkbridge_tab.reload_chains()
     messanger_tab.reload_menu()
 
@@ -42,7 +42,7 @@ with dpg.window() as primary_window:
 
 def launch():
     dpg.set_primary_window(primary_window, True)
-    dpg.create_viewport(title="zkBridge by @AlenKimov", width=800, height=600)
+    dpg.create_viewport(title="zkBridge by @AlenKimov", width=1200, height=600)
     dpg.setup_dearpygui()
     dpg.show_viewport()
     try:

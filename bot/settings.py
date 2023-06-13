@@ -20,11 +20,11 @@ class Settings(BaseModel):
     token_standard: TokenStandard = config.TOKEN_STANDARDS[0]
     bridge: ModuleChainNames = ModuleChainNames(
         source_chain_name=config.BRIDGE_CHAINS.TESTNET[0] if config.BRIDGE_CHAINS.TESTNET else None,
-        target_chain_name=config.BRIDGE_CHAINS.TESTNET[1] if config.BRIDGE_CHAINS.TESTNET else None,
+        target_chain_name=config.BRIDGE_CHAINS.TESTNET[0] if config.BRIDGE_CHAINS.TESTNET else None,
     )
     messenger: ModuleChainNames = ModuleChainNames(
         source_chain_name=config.MESSENGER_CHAINS.TESTNET[0] if config.MESSENGER_CHAINS.TESTNET else None,
-        target_chain_name=config.MESSENGER_CHAINS.TESTNET[1] if config.MESSENGER_CHAINS.TESTNET else None,
+        target_chain_name=config.MESSENGER_CHAINS.TESTNET[0] if config.MESSENGER_CHAINS.TESTNET else None,
     )
 
     def save(self):

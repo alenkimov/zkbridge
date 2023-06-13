@@ -18,6 +18,7 @@ coincurve = "^18.0.0"
 better_web3 = {path = "H:/Мой диск/Projects/Python/better_web3", develop = true}
 dearpygui = "^1.9.1"
 faker = "^18.10.1"
+sqlalchemy = "^2.0.16"
 
 
 [build-system]
