@@ -303,7 +303,7 @@ async def mint_and_bridge(
 
     async with aiohttp.ClientSession() as session:
         for i, account in enumerate(accounts, start=1):
-            account_balance = balances[account.address]
+            account_balance = Web3.from_wei(balances[account.address], "ether")
             balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
                             f" Balance: {account_balance} {source_chain.native_token.symbol}")
             if account_balance == 0:
@@ -333,8 +333,8 @@ async def send_messages(
 
     async with aiohttp.ClientSession() as session:
         for i, account in enumerate(accounts, start=1):
-            source_chain_account_balance = source_chain_balances[account.address]
-            target_chain_account_balance = target_chain_balances[account.address]
+            source_chain_account_balance = Web3.from_wei(source_chain_balances[account.address], "ether")
+            target_chain_account_balance = Web3.from_wei(target_chain_balances[account.address], "ether")
             source_chain_balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
                                          f" Balance: {source_chain_account_balance} {source_chain.native_token.symbol}")
             target_chain_balance_info = (f"{account_info_one_line(i, account.address, target_chain.chain_id)}"
