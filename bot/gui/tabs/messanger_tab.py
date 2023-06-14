@@ -34,6 +34,8 @@ class zkMessangerTab:
 
         with dpg.group(parent=self.menu):
             if chain_names:
+                settings.messenger.source_chain_name = chain_names[0]
+                settings.messenger.target_chain_name = chain_names[0]
                 dpg.add_text("Choose source and target chains:", wrap=0)
                 with dpg.group(horizontal=True):
                     dpg.add_radio_button(

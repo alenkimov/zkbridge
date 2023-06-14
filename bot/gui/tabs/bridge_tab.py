@@ -13,10 +13,10 @@ from .log_window import add_log_child_window
 
 
 def add_zkbridge_tab():
-    return zkBridgeTab()
+    return ZkBridgeTab()
 
 
-class zkBridgeTab:
+class ZkBridgeTab:
     def __init__(self):
         self.tag = dpg.generate_uuid()
         self.interaction_menu = dpg.generate_uuid()
@@ -40,10 +40,11 @@ class zkBridgeTab:
         dpg.delete_item(self.interaction_menu, children_only=True)
 
         chain_names = get_bridge_chain_names(net_mode)
-
         with dpg.group(parent=self.interaction_menu):
             if chain_names:
-                dpg.add_text("Choose source and target chains:", wrap=0)
+                settings.bridge.source_chain_name = chain_names[0]
+                settings.bridge.target_chain_name = chain_names[0]
+                dpg.add_text("Choose the source and target chains:", wrap=0)
                 with dpg.group(horizontal=True):
                     dpg.add_radio_button(
                         chain_names,
