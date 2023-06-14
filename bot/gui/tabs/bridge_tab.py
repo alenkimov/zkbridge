@@ -65,7 +65,7 @@ class ZkBridgeTab:
     def _bridge(self, net_mode: NetMode):
         dpg.disable_item(self.start_button)
 
-        chain_names = getattr(settings.messenger, net_mode)
+        chain_names = getattr(settings.bridge, net_mode)
 
         warnings = []
         if chain_names.source_chain_name == chain_names.target_chain_name:
