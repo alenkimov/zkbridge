@@ -7,5 +7,5 @@ MAINNET = ["Ethereum", "BNB Chain", "Polygon"]
 TESTNET = ["Ethereum Goerli Testnet", "BNB Chain Testnet", "Polygon Testnet"]
 
 [MESSENGER_CHAINS]
-MAINNET = ["Ethereum", "BNB Chain", "Polygon"]
+MAINNET = ["BNB Chain", "Polygon"]
 TESTNET = []
