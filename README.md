@@ -1,5 +1,6 @@
 # zkBridge: zkNFT and zkMessenger
 [ [Telegram канал](https://t.me/Cum_Insider) ]
+🍩 Donate `0xC0DE29c8e4ba19Df054f703916362Bf4BFd77f27`
 
 - [О скрипте](#О-скрипте)
 - [Запуск под Windows](#Запуск-под-Windows)
