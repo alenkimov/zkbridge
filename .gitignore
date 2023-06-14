@@ -1,6 +1,6 @@
 .idea
-input/
-log/
-unused/
-config/
-settings/
+input
+log
+unused
+config
+settings

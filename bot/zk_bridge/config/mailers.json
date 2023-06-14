@@ -1,0 +1,69 @@
+{
+    "eth": {
+        "send_contract_address": "0xbf782f6Eb61d617f7f72B978329339Aa728D21DB",
+        "receive_contract_address": "",
+        "layer_zero_receive_contract_address": ""
+    },
+    "bnb": {
+        "send_contract_address": "0xfD3F4D96378072db0862a6F76CC258C2B7ea36cc",
+        "receive_contract_address": "0xA98163227B85CcC765295Ce5C18E8aAD663De147",
+        "layer_zero_receive_contract_address": "0x39dad2E89a213626a99Ae09b808b4A79c0d3EC16",
+        "value": 1000000000000000
+    },
+    "matic": {
+        "send_contract_address": "0xdB6fb08DD8Ce406DA8Ff53FAe65Bd374e3d68681",
+        "receive_contract_address": "0xCcE1E39f2Ef1e69E6B61Cf79212E96C92C4aFf9a",
+        "layer_zero_receive_contract_address": "0x2647D579ebc9e1eC5e01c32030d8e69e4a678dEB",
+        "value": 500000000000000000
+    },
+    "avax": {
+        "send_contract_address": "",
+        "receive_contract_address": "0x64Ee9e0824603dcf70D7EeFA4F8b97A8A36bEBf3",
+        "layer_zero_receive_contract_address": "0x036d11EB2EA46329b68558B430eece6196d694ec"
+    },
+    "ftm": {
+        "send_contract_address": "",
+        "receive_contract_address": "0xfCF250b621872aceB9C0BB78AACe1F1cFc5820b1",
+        "layer_zero_receive_contract_address": "0x59a90C88C899338F6b3E9a94CDB1047FD0b41149"
+    },
+    "oeth": {
+        "send_contract_address": "",
+        "receive_contract_address": "0x5B5F9c7191Fb0EfACe911b4462Fdf76B4Cd9ed77",
+        "layer_zero_receive_contract_address": ""
+    },
+    "arb1": {
+        "send_contract_address": "",
+        "receive_contract_address": "0x18BD78E0c718184C3EA8844fDc196D767F8432A4",
+        "layer_zero_receive_contract_address": "0x21F4cF2782A5fEe7FC00d0fC4501cE47461244E5"
+    },
+    "gno": {
+        "send_contract_address": "",
+        "receive_contract_address": "0xeb7EAdF4F1aC6992D445c072dcC4B2C719BBa8b8",
+        "layer_zero_receive_contract_address": "0x37FdF720424376195C3419C063247f9B08F4a850"
+    },
+    "metis_andromeda": {
+        "send_contract_address": "",
+        "receive_contract_address": "0xEDC9Ca7d113e53d3e29D9d25eB4dc232817Beda0",
+        "layer_zero_receive_contract_address": "0xA6A3d32d5b2a2E6248fC671e18993eD3E798ff45"
+    },
+    "mbeam": {
+        "send_contract_address": "",
+        "receive_contract_address": "0xAf83500eA01d098F4FEBE94d54a5Dc51C41e46eD",
+        "layer_zero_receive_contract_address": "0xe6eb0b3A1b0c542aCCB40a86565786Fcf8a42EF0"
+    },
+    "combo_testnet": {
+        "send_contract_address": "",
+        "receive_contract_address": "0xa1873c9c00e3b55b2fF503Fb1E836cB6D8083ce1",
+        "layer_zero_receive_contract_address": ""
+    },
+    "arb_nova": {
+        "send_contract_address": "",
+        "receive_contract_address": "0x52c491c2afdA8b6FB361404213122644D98e0AA0",
+        "layer_zero_receive_contract_address": "0x2dED59F685f18ee016a93d1CeCc5b7eA0322aFED"
+    },
+    "linea_testnet": {
+        "send_contract_address": "",
+        "receive_contract_address": "0xCaaFD0780ECF3397ae15762D8E13F941B972D7B9",
+        "layer_zero_receive_contract_address": ""
+    }
+}
