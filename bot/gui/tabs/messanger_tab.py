@@ -34,19 +34,17 @@ class zkMessangerTab:
 
         with dpg.group(parent=self.menu):
             if chain_names:
-                settings.messenger.source_chain_name = chain_names[0]
-                settings.messenger.target_chain_name = chain_names[0]
                 dpg.add_text("Choose source and target chains:", wrap=0)
                 with dpg.group(horizontal=True):
                     dpg.add_radio_button(
                         chain_names,
-                        default_value=settings.messenger.source_chain_name,
-                        callback=lambda s, d: settings.messenger.__setattr__("source_chain_name", d),
+                        default_value=getattr(settings.messenger, net_mode).source_chain_name,
+                        callback=lambda s, d: setattr(getattr(settings.messenger, net_mode), "source_chain_name", d),
                     )
                     dpg.add_radio_button(
                         chain_names,
-                        default_value=settings.messenger.target_chain_name,
-                        callback=lambda s, d: settings.messenger.__setattr__("target_chain_name", d),
+                        default_value=getattr(settings.messenger, net_mode).target_chain_name,
+                        callback=lambda s, d: setattr(getattr(settings.messenger, net_mode), "target_chain_name", d),
                     )
                 dpg.add_button(label="MESSAGE", tag=self.start_button, callback=self.message)
             else:
@@ -55,11 +53,13 @@ class zkMessangerTab:
     def reload_menu(self):
         self._reload_menu(settings.net_mode)
 
-    def message(self):
+    def _message(self, net_mode: NetMode):
         dpg.disable_item(self.start_button)
 
+        chain_names = getattr(settings.messenger, net_mode)
+
         warnings = []
-        if settings.messenger.source_chain_name == settings.messenger.target_chain_name:
+        if chain_names.source_chain_name == chain_names.target_chain_name:
             warnings.append("The same chains")
         if not accounts:
             warnings.append("No accounts found")
@@ -70,8 +70,12 @@ class zkMessangerTab:
         else:
             dpg.configure_item(self.start_button, label="MESSAGING...")
             asyncio.run(send_messages(
-                accounts, settings.net_mode, settings.messenger.source_chain_name,
-                settings.messenger.target_chain_name))
+                accounts, settings.net_mode,
+                chain_names.source_chain_name,
+                chain_names.target_chain_name))
 
         dpg.enable_item(self.start_button)
         dpg.configure_item(self.start_button, label="MESSAGE")
+
+    def message(self):
+        return self._message(settings.net_mode)

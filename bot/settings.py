@@ -15,23 +15,49 @@ class ModuleChainNames(BaseModel):
     target_chain_name: str or None = None
 
 
+class ModuleChainNamesByNetMode(BaseModel):
+    testnet: ModuleChainNames
+    mainnet: ModuleChainNames
+
+
 class Settings(BaseModel):
-    net_mode: NetMode = "testnet"
-    token_standard: TokenStandard = config.TOKEN_STANDARDS[0]
-    bridge: ModuleChainNames = ModuleChainNames(
-        source_chain_name=config.BRIDGE_CHAINS.TESTNET[0] if config.BRIDGE_CHAINS.TESTNET else None,
-        target_chain_name=config.BRIDGE_CHAINS.TESTNET[0] if config.BRIDGE_CHAINS.TESTNET else None,
-    )
-    messenger: ModuleChainNames = ModuleChainNames(
-        source_chain_name=config.MESSENGER_CHAINS.TESTNET[0] if config.MESSENGER_CHAINS.TESTNET else None,
-        target_chain_name=config.MESSENGER_CHAINS.TESTNET[0] if config.MESSENGER_CHAINS.TESTNET else None,
-    )
+    net_mode: NetMode
+    token_standard: TokenStandard
+    bridge: ModuleChainNamesByNetMode
+    messenger: ModuleChainNamesByNetMode
 
     def save(self):
         rewrite_json(settings_filepath, self.dict())
 
 
+default_settings = {
+    "net_mode": "testnet",
+    "token_standard": config.TOKEN_STANDARDS[0],
+    "bridge": {
+        "testnet": {
+            "source_chain_name": config.BRIDGE_CHAINS.TESTNET[0] if config.BRIDGE_CHAINS.TESTNET else None,
+            "target_chain_name": config.BRIDGE_CHAINS.TESTNET[0] if config.BRIDGE_CHAINS.TESTNET else None,
+        },
+        "mainnet": {
+            "source_chain_name": config.BRIDGE_CHAINS.MAINNET[0] if config.BRIDGE_CHAINS.MAINNET else None,
+            "target_chain_name": config.BRIDGE_CHAINS.MAINNET[0] if config.BRIDGE_CHAINS.MAINNET else None,
+        },
+    },
+    "messenger": {
+        "testnet": {
+            "source_chain_name": config.MESSENGER_CHAINS.TESTNET[0] if config.MESSENGER_CHAINS.TESTNET else None,
+            "target_chain_name": config.MESSENGER_CHAINS.TESTNET[0] if config.MESSENGER_CHAINS.TESTNET else None,
+
+        },
+        "mainnet": {
+            "source_chain_name": config.MESSENGER_CHAINS.MAINNET[0] if config.MESSENGER_CHAINS.MAINNET else None,
+            "target_chain_name": config.MESSENGER_CHAINS.MAINNET[0] if config.MESSENGER_CHAINS.MAINNET else None,
+        },
+    }
+}
+
+
 if settings_filepath.exists():
     settings = Settings(**load_json(settings_filepath))
 else:
-    settings = Settings()
+    settings = Settings(**default_settings)
