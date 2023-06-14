@@ -337,18 +337,18 @@ async def send_messages(
             target_chain_account_balance = target_chain_balances[account.address]
             source_chain_balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
                                          f" Balance: {source_chain_account_balance} {source_chain.native_token.symbol}")
-            target_chain__balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
-                                          f" Balance: {target_chain_account_balance} {source_chain.native_token.symbol}")
-            if source_chain_balance_info == 0:
+            target_chain_balance_info = (f"{account_info_one_line(i, account.address, target_chain.chain_id)}"
+                                         f" Balance: {target_chain_account_balance} {target_chain.native_token.symbol}")
+            if source_chain_account_balance == 0:
                 logger.warning(source_chain_balance_info)
                 continue
-            if target_chain__balance_info == 0:
-                logger.warning(target_chain__balance_info)
+            if target_chain_account_balance == 0:
+                logger.warning(target_chain_balance_info)
                 continue
             zk_bridge = ZkBridgeAPI(session)
             try:
                 logger.info(source_chain_balance_info)
-                logger.info(target_chain__balance_info)
+                logger.info(target_chain_balance_info)
                 await auth(i, zk_bridge, account)
                 await send_random_message(i, zk_bridge, account, net_mode, source_chain_name, target_chain_name)
             except:
