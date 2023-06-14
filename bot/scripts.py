@@ -5,7 +5,6 @@ from typing import Iterable
 
 import aiohttp
 from better_web3 import Chain
-from better_web3.typing_ import TxHash
 from eth_account.signers.local import LocalAccount
 from eth_typing import HexStr
 from web3 import Web3
@@ -238,24 +237,6 @@ async def bridge(
     )
 
 
-async def mint_and_bridge(
-        accounts: Iterable[LocalAccount],
-        net_mode: NetMode,
-        source_chain_name: str,
-        target_chain_name: str,
-        standard: TokenStandard
-):
-    async with aiohttp.ClientSession() as session:
-        for i, account in enumerate(accounts, start=1):
-            zk_bridge = ZkBridgeAPI(session)
-            try:
-                await auth(i, zk_bridge, account)
-                mint_data = await mint(i, zk_bridge, account, net_mode, source_chain_name, standard)
-                await bridge(i, zk_bridge, account, net_mode, source_chain_name, target_chain_name, mint_data)
-            except:
-                continue
-
-
 async def send_random_message(
         index: int,
         zk_bridge: ZkBridgeAPI,
@@ -309,16 +290,65 @@ async def send_random_message(
         )
 
 
+async def mint_and_bridge(
+        accounts: Iterable[LocalAccount],
+        net_mode: NetMode,
+        source_chain_name: str,
+        target_chain_name: str,
+        standard: TokenStandard
+):
+    source_chain = chains[net_mode][source_chain_name]
+    account_addresses = [account.address for account in accounts]
+    balances = source_chain.get_balances(account_addresses)
+
+    async with aiohttp.ClientSession() as session:
+        for i, account in enumerate(accounts, start=1):
+            account_balance = balances[account.address]
+            balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
+                            f" Balance: {account_balance} {source_chain.native_token.symbol}")
+            if account_balance == 0:
+                logger.warning(balance_info)
+                continue
+            zk_bridge = ZkBridgeAPI(session)
+            try:
+                logger.info(balance_info)
+                await auth(i, zk_bridge, account)
+                mint_data = await mint(i, zk_bridge, account, net_mode, source_chain_name, standard)
+                await bridge(i, zk_bridge, account, net_mode, source_chain_name, target_chain_name, mint_data)
+            except:
+                continue
+
+
 async def send_messages(
         accounts: Iterable[LocalAccount],
         net_mode: NetMode,
         source_chain_name: str,
         target_chain_name: str
 ):
+    source_chain = chains[net_mode][source_chain_name]
+    target_chain = chains[net_mode][target_chain_name]
+    account_addresses = [account.address for account in accounts]
+    source_chain_balances = source_chain.get_balances(account_addresses)
+    target_chain_balances = target_chain.get_balances(account_addresses)
+
     async with aiohttp.ClientSession() as session:
         for i, account in enumerate(accounts, start=1):
+            source_chain_account_balance = source_chain_balances[account.address]
+            target_chain_account_balance = target_chain_balances[account.address]
+            source_chain_balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
+                                         f" Balance: {source_chain_account_balance} {source_chain.native_token.symbol}")
+            target_chain__balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
+                                          f" Balance: {target_chain_account_balance} {source_chain.native_token.symbol}")
+            if source_chain_balance_info == 0:
+                logger.warning(source_chain_balance_info)
+                continue
+            if target_chain__balance_info == 0:
+                logger.warning(target_chain__balance_info)
+                continue
             zk_bridge = ZkBridgeAPI(session)
             try:
+                logger.info(source_chain_balance_info)
+                logger.info(target_chain__balance_info)
                 await auth(i, zk_bridge, account)
                 await send_random_message(i, zk_bridge, account, net_mode, source_chain_name, target_chain_name)
             except:
