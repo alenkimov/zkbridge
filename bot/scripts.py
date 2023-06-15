@@ -2,6 +2,7 @@ import asyncio
 import random
 from contextlib import contextmanager
 from typing import Iterable
+from PIL import Image
 
 import aiohttp
 from better_web3 import Chain
@@ -14,7 +15,8 @@ from web3.contract.contract import ContractFunction
 from web3.types import TxReceipt, Wei
 
 from bot.config import config
-from bot.utils import get_random_image, generate_simple_sentence
+from bot.input import get_image_filenames, used_images, rewrite_used_images, IMAGES_DIR
+from bot.utils import generate_random_image, generate_simple_sentence, random_resize, image_to_bytes
 from bot.chains import chains
 from bot.zk_bridge import ZkBridgeAPI, ZkBridgeCreator, ADDITIONAL_DATA
 from bot.zk_bridge.contracts import receivers, senders, mailers
@@ -111,13 +113,32 @@ async def mint(
     chain = chains[net_mode][chain_name]
     additional_chain_data = ADDITIONAL_DATA[net_mode][chain_name]
 
-    image = get_random_image()
+    all_images = get_image_filenames()
+    if not all_images:
+        logger.warning(f"{account_info_one_line(index, account.address)}"
+                       f" The folder with images {IMAGES_DIR} is empty!")
+
+    unused_images = all_images.difference(used_images)
+    if not unused_images:
+        image = generate_random_image()
+        logger.warning(f"{account_info_one_line(index, account.address)}"
+                       f" In the image folder {IMAGES_DIR} all images have already been used! Random image generated.")
+    else:
+        unused_image = unused_images.pop()
+        image = Image.open(IMAGES_DIR / unused_image)
+        used_images.add(unused_image)
+        rewrite_used_images(used_images)
+
+    if config.RESIZE_PICTURE:
+        logger.info(f"The image size is randomly resized. Image resizing can be disabled in the configuration file.")
+        image = random_resize(image)
+    image_bytes = image_to_bytes(image)
 
     with logged_action(index, account.address,
                        "Image generated and uploaded",
                        "Failed to upload image"):
-        image_url = await zk_bridge.upload_image(image)
-        logger.info(f"{account_info_one_line(index, account.address)} Image URL: {image_url}")
+        image_url = await zk_bridge.upload_image(image_bytes)
+    logger.info(f"{account_info_one_line(index, account.address)} Image URL: {image_url}")
 
     nft_name, nft_description = generate_simple_sentence(), generate_simple_sentence()
 

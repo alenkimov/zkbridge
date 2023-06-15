@@ -28,6 +28,7 @@ class Config(BaseModel):
     MESSENGER_CHAINS: AvailableChains
     TOKEN_STANDARDS: list[TokenStandard]
     DELAY: list[int]
+    RESIZE_PICTURE: bool
 
 
 config = Config(**load_toml(config_toml_path))

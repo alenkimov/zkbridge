@@ -1,5 +1,6 @@
 import io
 import json
+import random
 import shutil
 import tomllib
 from pathlib import Path
@@ -60,10 +61,16 @@ def load_toml(filepath: Path) -> dict:
         raise FileNotFoundError(filepath)
 
 
-def get_random_image() -> bytes:
+def generate_random_image() -> Image:
     imarray = numpy.random.rand(100, 100, 3) * 255
-    image = Image.fromarray(imarray.astype('uint8')).convert('RGBA')
-    img_byte_arr = io.BytesIO()
-    image.save(img_byte_arr, format='PNG')
-    img_bytes = img_byte_arr.getvalue()
-    return img_bytes
+    return Image.fromarray(imarray.astype('uint8')).convert('RGBA')
+
+
+def random_resize(image: Image) -> Image:
+    return image.resize((random.randint(30, 120), random.randint(30, 120)))
+
+
+def image_to_bytes(image: Image) -> bytes:
+    img_bytes = io.BytesIO()
+    image.save(img_bytes, format='PNG')
+    return img_bytes.getvalue()
