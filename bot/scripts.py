@@ -1,6 +1,5 @@
 import asyncio
 import random
-import secrets
 from contextlib import contextmanager
 from typing import Iterable
 
@@ -120,7 +119,7 @@ async def mint(
         image_url = await zk_bridge.upload_image(image)
         logger.info(f"{account_info_one_line(index, account.address)} Image URL: {image_url}")
 
-    nft_name, nft_description = secrets.token_hex(16), secrets.token_hex(16)
+    nft_name, nft_description = generate_simple_sentence(), generate_simple_sentence()
 
     with logged_action(index, account.address,
                        "Mint data obtained",
