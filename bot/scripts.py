@@ -130,7 +130,6 @@ async def mint(
         rewrite_used_images(used_images)
 
     if config.RESIZE_PICTURE:
-        logger.info(f"The image size is randomly resized. Image resizing can be disabled in the configuration file.")
         image = random_resize(image)
     image_bytes = image_to_bytes(image)
 

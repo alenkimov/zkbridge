@@ -3,6 +3,8 @@ import dearpygui.dearpygui as dpg
 from bot.constants import NET_MODES
 from bot.paths import SETTINGS_DIR
 from bot.settings import settings
+from bot.config import config
+from bot.logger import logger
 from .tabs import add_wallets_tab, add_messanger_tab, add_zkbridge_tab, add_chains_tab
 from .menu_bar import add_menu_bar
 
@@ -46,6 +48,10 @@ def launch():
     dpg.setup_dearpygui()
     dpg.show_viewport()
     try:
+        if config.RESIZE_PICTURE:
+            logger.info(
+                f"Images will be randomly resized. Image resizing can be disabled in the configuration file.")
+        logger.info(f"Delay: {config.DELAY[0]}-{config.DELAY[1]}s.")
         dpg.start_dearpygui()
     finally:
         settings.save()
