@@ -27,6 +27,7 @@ class Config(BaseModel):
     BRIDGE_CHAINS: AvailableChains
     MESSENGER_CHAINS: AvailableChains
     TOKEN_STANDARDS: list[TokenStandard]
+    DELAY: list[int]
 
 
 config = Config(**load_toml(config_toml_path))

@@ -1,4 +1,5 @@
 import asyncio
+import random
 import secrets
 from contextlib import contextmanager
 from typing import Iterable
@@ -13,6 +14,7 @@ from better_web3.exceptions import ChainException
 from web3.contract.contract import ContractFunction
 from web3.types import TxReceipt, Wei
 
+from bot.config import config
 from bot.utils import get_random_image, generate_simple_sentence
 from bot.chains import chains
 from bot.zk_bridge import ZkBridgeAPI, ZkBridgeCreator, ADDITIONAL_DATA
@@ -315,6 +317,9 @@ async def mint_and_bridge(
                 await auth(i, zk_bridge, account)
                 mint_data = await mint(i, zk_bridge, account, net_mode, source_chain_name, standard)
                 await bridge(i, zk_bridge, account, net_mode, source_chain_name, target_chain_name, mint_data)
+                sleep_time = random.randint(*config.DELAY)
+                logger.info(f"Sleeping ({sleep_time}s.)")
+                await asyncio.sleep(sleep_time)
             except:
                 continue
 
@@ -351,5 +356,8 @@ async def send_messages(
                 logger.info(target_chain_balance_info)
                 await auth(i, zk_bridge, account)
                 await send_random_message(i, zk_bridge, account, net_mode, source_chain_name, target_chain_name)
+                sleep_time = random.randint(*config.DELAY)
+                logger.info(f"Sleeping ({sleep_time}s.)")
+                await asyncio.sleep(sleep_time)
             except:
                 continue
