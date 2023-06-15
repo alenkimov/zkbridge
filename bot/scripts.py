@@ -128,7 +128,10 @@ async def mint(
         image = Image.open(IMAGES_DIR / unused_image)
         used_images.add(unused_image)
         rewrite_used_images(used_images)
-
+        if unused_images:
+            logger.info(f"Unused images last: {len(unused_images)}")
+        else:
+            logger.warning(f"That was the last image! The next images will be generated automatically!")
     if config.RESIZE_PICTURE:
         image = random_resize(image)
     image_bytes = image_to_bytes(image)
