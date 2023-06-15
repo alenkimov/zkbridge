@@ -1,5 +1,5 @@
 # zkBridge: zkNFT and zkMessenger
-[ [Telegram канал](https://t.me/Cum_Insider) ]
+[ [Telegram канал](https://t.me/Cum_Insider) ] [ [Заказчик скрипта](https://t.me/akellabit) ]
 🍩 Donate `0xC0DE29c8e4ba19Df054f703916362Bf4BFd77f27`
 
 - [О скрипте](#О-скрипте)
