@@ -14,6 +14,7 @@ from better_web3.exceptions import ChainException
 from web3.contract.contract import ContractFunction
 from web3.types import TxReceipt, Wei
 
+from bot.better_http.exceptions import Unauthorized
 from bot.config import config
 from bot.input import get_image_filenames, used_images, rewrite_used_images, IMAGES_DIR
 from bot.utils import generate_random_image, generate_simple_sentence, random_resize, image_to_bytes
@@ -51,9 +52,13 @@ def logged_action(index: int, account_address: str, success_message: str, error_
     try:
         yield
         logger.success(f"{account_info} {success_message}")
+    except Unauthorized:
+        logger.error(f"{account_info} {error_message}:"
+                     f" User not exists. Authorize from this wallet on the site at least once.")
+        raise
     except Exception as e:
         logger.error(f"{account_info} {error_message}: unexpected error.")
-        logger.exception(e)
+        logger.debug(e)
         raise
 
 
