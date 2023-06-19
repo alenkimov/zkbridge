@@ -27,13 +27,13 @@
 - Установите MSVC и Пакет SDK для Windows: [инструкция](https://teletype.in/@alenkimov/web3-installation-error). Без этого при попытке установить библиотеку web3 будет возникать ошибка "Microsoft Visual C++ 14.0 or greater is required".
 - Установите [git](https://git-scm.com/download/win). Это позволит с легкостью получать обновления скрипта командой `git pull`
 - Откройте консоль в удобном месте...
-  - Склонируйте (скачайте) этот репозиторий:
+  - Склонируйте (или [скачайте](https://github.com/AlenKimov/zkbridge/archive/refs/heads/main.zip)) этот репозиторий:
     ```bash
-    git clone https://github.com/AlenKimov/zk_nft_bridge.git
+    git clone https://github.com/AlenKimov/zkbridge.git
     ```
   - Перейдите в папку проекта:
     ```bash
-    cd zk_nft_bridge
+    cd zkbridge
     ```
   - Установите требуемые библиотеки следующей командой или запуском файла `install-libraries.bat`:
     ```bash
@@ -67,11 +67,11 @@ export PATH="/root/.local/bin:$PATH"
 ```
 - Склонируйте этот репозиторий:
 ```bash
-git clone https://github.com/AlenKimov/zk_nft_bridge.git
+git clone https://github.com/AlenKimov/zkbridge.git
 ```
 - Перейдите в папку проекта:
 ```bash
-cd zk_nft_bridge
+cd zkbridge
 ```
 - Установите требуемые библиотеки:
 ```bash
@@ -98,7 +98,7 @@ poetry run python start.py
 	- [ ] Изменение RPC сетей
 	- [ ] Запрос актуальной цены газа
 - Вкладка wallets
-	- [ ] Удалить / Отключить все кошельки
-	- [ ] Удалить / Отключить определенный кошелек
+    - [ ] Удалить все кошельки / определенный кошелек
+	- [ ] Отключить / Включить все кошельки / определенный кошелек
 	- [ ] Флаг "показать приватные ключи"
 	- [ ] Заголовок столбца — это кнопка, нажав на которую запрашиваются балансы кошельков
