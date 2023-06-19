@@ -105,7 +105,7 @@ class ZkBridgeAPI(HTTPClient):
 
     async def get_validation_message(self, address: str) -> str:
         route = ZkBridgeAPI.Route("POST", "/signin/validation_message")
-        payload = {"publicKey": address}
+        payload = {"publicKey": address.lower()}
         data = await self.request(route, json=payload)
         validation_message = data["message"]
         return validation_message
