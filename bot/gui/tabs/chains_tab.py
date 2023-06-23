@@ -34,8 +34,8 @@ class ChainsTab:
             with dpg.table_row(parent=self.table):
                 dpg.add_text(chain_name)
                 dpg.add_text(chain.rpc)
-                dpg.add_text(chain.native_token.symbol)
-                dpg.add_text(chain.explorer.url)
+                dpg.add_text(chain.token.symbol)
+                dpg.add_text(chain.explorer_url)
 
     def reload_table(self):
         self._reload_table(settings.net_mode)

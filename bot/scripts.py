@@ -10,7 +10,6 @@ from eth_account.signers.local import LocalAccount
 from eth_typing import HexStr
 from web3 import Web3
 from better_web3.utils import sign_message
-from better_web3.exceptions import ChainException
 from web3.contract.contract import ContractFunction
 from web3.types import TxReceipt, Wei
 
@@ -75,22 +74,19 @@ def execute_logged_transaction(
     account_info = account_info_one_line(index, account.address, chain.chain_id)
     try:
         tx_receipt, tx_hash = _execute_transaction(chain, account, fn, value=value)
-        tx_hash_link = chain.explorer.get_link_by_tx_hash(tx_hash)
+        tx_hash_link = chain.get_link_by_tx_hash(tx_hash)
         tx_fee_wei = tx_receipt.gasUsed * tx_receipt.effectiveGasPrice
         tx_fee = Web3.from_wei(tx_fee_wei, "ether")
         message = (f"{account_info} {success_message}"
-                   f"\nFee: {tx_fee} {chain.native_token.symbol}"
+                   f"\nFee: {tx_fee} {chain.token.symbol}"
                    f"\nHash: {tx_hash_link}")
         if value is not None:
-            message += f"\nSent: {Web3.from_wei(value, 'ether')} {chain.native_token.symbol}"
+            message += f"\nSent: {Web3.from_wei(value, 'ether')} {chain.token.symbol}"
         logger.success(message)
         return tx_hash
-    except ChainException as e:
-        logger.error(f"{account_info} {error_message}. {e}.")
-        raise
     except Exception as e:
-        logger.error(f"{account_info} {error_message}: unexpected error.")
-        logger.exception(e)
+        logger.error(f"{account_info} {error_message}: {e}.")
+        logger.debug(e)
         raise
 
 
@@ -330,19 +326,35 @@ async def mint_and_bridge(
 ):
     source_chain = chains[net_mode][source_chain_name]
     account_addresses = [account.address for account in accounts]
-    balances = source_chain.get_balances(account_addresses)
+    balances = list(source_chain.batch_request.balances(account_addresses, raise_exceptions=False))
 
     async with aiohttp.ClientSession() as session:
-        for i, account in enumerate(accounts, start=1):
-            account_balance = Web3.from_wei(balances[account.address], "ether")
-            balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
-                            f" Balance: {account_balance} {source_chain.native_token.symbol}")
-            if account_balance == 0:
-                logger.warning(balance_info)
-                continue
+        for i, (account, balance_data) in enumerate(zip(accounts, balances), start=1):
+            account_info = account_info_one_line(i, account.address, source_chain.chain_id)
+            if isinstance(balance_data["balance"], Exception):
+                logger.warning(f"{account_info}"
+                               " An error occurred when requesting a wallet balance!"
+                               " Try reducing BATCH_REQUEST_SIZE or increasing BATCH_REQUEST_DELAY"
+                               " in the configuration file. You can also try changing the RPC.")
+                logger.debug(f"{account_info}"
+                             f"{balance_data['balance']}")
+                if config.IGNORE_ERRORS:
+                    logger.warning(f"{account_info}"
+                                   f" Continuing work because IGNORE_ERRORS={config.IGNORE_ERRORS}")
+                else:
+                    logger.warning(f"{account_info}"
+                                   f" Account skipped because IGNORE_ERRORS={config.IGNORE_ERRORS}")
+                    continue
+            else:
+                account_balance = Web3.from_wei(balance_data["balance"], "ether")
+                balance_info = (f"{account_info}"
+                                f" Balance: {account_balance} {source_chain.token.symbol}")
+                logger.info(balance_info)
+                if account_balance == 0:
+                    logger.warning(balance_info)
+                    continue
             zk_bridge = ZkBridgeAPI(session)
             try:
-                logger.info(balance_info)
                 await auth(i, zk_bridge, account)
                 mint_data = await mint(i, zk_bridge, account, net_mode, source_chain_name, standard)
                 await bridge(i, zk_bridge, account, net_mode, source_chain_name, target_chain_name, mint_data)
@@ -362,17 +374,18 @@ async def send_messages(
     source_chain = chains[net_mode][source_chain_name]
     target_chain = chains[net_mode][target_chain_name]
     account_addresses = [account.address for account in accounts]
-    source_chain_balances = source_chain.get_balances(account_addresses)
-    target_chain_balances = target_chain.get_balances(account_addresses)
+    source_chain_balances = list(source_chain.batch_request.balances(account_addresses))
+    target_chain_balances = list(target_chain.batch_request.balances(account_addresses))
 
     async with aiohttp.ClientSession() as session:
-        for i, account in enumerate(accounts, start=1):
-            source_chain_account_balance = Web3.from_wei(source_chain_balances[account.address], "ether")
-            target_chain_account_balance = Web3.from_wei(target_chain_balances[account.address], "ether")
+        for i, (account, source_chain_account_balance_data, target_chain_account_balance_data) \
+                in enumerate(zip(accounts, source_chain_balances, target_chain_balances), start=1):
+            source_chain_account_balance = Web3.from_wei(source_chain_account_balance_data["balance"], "ether")
+            target_chain_account_balance = Web3.from_wei(target_chain_account_balance_data["balance"], "ether")
             source_chain_balance_info = (f"{account_info_one_line(i, account.address, source_chain.chain_id)}"
-                                         f" Balance: {source_chain_account_balance} {source_chain.native_token.symbol}")
+                                         f" Balance: {source_chain_account_balance} {source_chain.token.symbol}")
             target_chain_balance_info = (f"{account_info_one_line(i, account.address, target_chain.chain_id)}"
-                                         f" Balance: {target_chain_account_balance} {target_chain.native_token.symbol}")
+                                         f" Balance: {target_chain_account_balance} {target_chain.token.symbol}")
             if source_chain_account_balance == 0:
                 logger.warning(source_chain_balance_info)
                 continue

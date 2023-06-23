@@ -1,7 +1,7 @@
-from better_web3 import Chain, Explorer, NativeToken, GasStation
+from better_web3 import Chain
 
 from bot.types_ import NetMode
-from bot.config import CHAINS_DATA
+from bot.config import CHAINS_DATA, config
 
 
 chains: dict[str: dict[str: Chain]] = dict()
@@ -10,13 +10,11 @@ chains: dict[str: dict[str: Chain]] = dict()
 for net_mode, name_to_chain_data in CHAINS_DATA.items():
     data: dict[str: Chain] = dict()
     for chain_name, chain_data in name_to_chain_data.items():
-        chain = Chain(rpc=chain_data["rpc"])
-        if "explorer" in chain_data:
-            chain.explorer = Explorer(**chain_data["explorer"])
-        if "native_token" in chain_data:
-            chain.native_token = NativeToken(**chain_data["native_token"])
-        if "gas_station_url" in chain_data:
-            chain.gas_station = GasStation(chain_data["gas_station_url"])
+        chain = Chain(
+            **chain_data,
+            batch_request_size=config.BATCH_REQUEST_SIZE,
+            batch_request_delay=config.BATCH_REQUEST_DELAY,
+        )
         data.update({chain_name: chain})
     chains.update({net_mode: data})
 

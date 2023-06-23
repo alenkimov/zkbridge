@@ -29,6 +29,9 @@ class Config(BaseModel):
     TOKEN_STANDARDS: list[TokenStandard]
     DELAY: list[int]
     RESIZE_PICTURE: bool
+    BATCH_REQUEST_SIZE: int
+    BATCH_REQUEST_DELAY: int
+    IGNORE_ERRORS: bool
 
 
 config = Config(**load_toml(config_toml_path))

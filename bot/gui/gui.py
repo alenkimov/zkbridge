@@ -51,7 +51,13 @@ def launch():
         if config.RESIZE_PICTURE:
             logger.info(
                 f"Images will be randomly resized. Image resizing can be disabled in the configuration file.")
-        logger.info(f"Delay: {config.DELAY[0]}-{config.DELAY[1]}s.")
+        logger.info(f"DELAY: {config.DELAY[0]}-{config.DELAY[1]}s.")
+        logger.info(f"BATCH_REQUEST_SIZE: {config.BATCH_REQUEST_SIZE}")
+        logger.info(f"BATCH_REQUEST_DELAY: {config.BATCH_REQUEST_DELAY}s.")
+        if config.IGNORE_ERRORS:
+            logger.warning(f"IGNORE_ERRORS: {config.IGNORE_ERRORS} (it can lead to unexpected errors)")
+        else:
+            logger.info(f"IGNORE_ERRORS: {config.IGNORE_ERRORS}")
         dpg.start_dearpygui()
     finally:
         settings.save()

@@ -1,55 +1,39 @@
 [mainnet."Ethereum"]
 rpc = "https://rpc.ankr.com/eth"
-native_token.symbol = "ETH"
-native_token.decimals = 18
-explorer.url = "https://etherscan.io"
-explorer.api_url = "https://api.etherscan.io"
+explorer_url = "https://etherscan.io"
+symbol = "ETH"
 
 [mainnet."BNB Chain"]
 rpc = "https://rpc.ankr.com/bsc"
-native_token.symbol = "BNB"
-native_token.decimals = 18
-explorer.url = "https://bscscan.com"
-explorer.api_url = "https://api.bscscan.com"
+explorer_url = "https://bscscan.com"
+symbol = "BNB"
 
 [mainnet."Polygon"]
 rpc = "https://polygon.llamarpc.com"
-native_token.symbol = "MATIC"
-native_token.decimals = 18
-explorer.url = "https://polygonscan.com"
-explorer.api_url = "https://api.polygonscan.com"
+explorer_url = "https://polygonscan.com"
+symbol = "MATIC"
 
 [testnet."Ethereum Goerli Testnet"]
 rpc = "https://eth-goerli.public.blastapi.io"
-native_token.symbol = "gETH"
-native_token.decimals = 18
-explorer.url = "https://goerli.etherscan.io"
-explorer.api_url = "https://api-goerli.etherscan.io"
+explorer_url = "https://goerli.etherscan.io"
+symbol = "gETH"
 
 [testnet."BNB Chain Testnet"]
 rpc = "https://bsc-testnet.publicnode.com"
-native_token.symbol = "tBNB"
-native_token.decimals = 18
-explorer.url = "https://testnet.bscscan.com"
-explorer.api_url = "https://api.testnet.bscscan.com"
+explorer_url = "https://testnet.bscscan.com"
+symbol = "tBNB"
 
 [testnet."Avalanche Testnet"]
 rpc = "https://endpoints.omniatech.io/v1/avax/fuji/public"
-native_token.symbol = "tAVAX"
-native_token.decimals = 18
-explorer.url = "https://testnet.snowtrace.io"
-explorer.api_url = "https://api.testnet.snowtrace.io"
+explorer_url = "https://testnet.snowtrace.io"
+symbol = "tAVAX"
 
 [testnet."Polygon Testnet"]
 rpc = "https://matic-mumbai.chainstacklabs.com"
-native_token.symbol = "tMATIC"
-native_token.decimals = 18
-explorer.url = "https://mumbai.polygonscan.com"
-explorer.api_url = "https://api.mumbai.polygonscan.com"
+explorer_url = "https://mumbai.polygonscan.com"
+symbol = "tMATIC"
 
 [testnet."Fantom Testnet"]
 rpc = "https://fantom-testnet.publicnode.com"
-native_token.symbol = "tFTM"
-native_token.decimals = 18
-explorer.url = "https://testnet.ftmscan.com"
-explorer.api_url = "https://api.testnet.ftmscan.com"
+explorer_url = "https://testnet.ftmscan.com"
+symbol = "tFTM"
