@@ -326,6 +326,8 @@ async def mint_and_bridge(
 ):
     source_chain = chains[net_mode][source_chain_name]
     account_addresses = [account.address for account in accounts]
+
+    logger.info(f"Requesting balances...")
     balances = list(source_chain.batch_request.balances(account_addresses, raise_exceptions=False))
 
     async with aiohttp.ClientSession() as session:
@@ -351,7 +353,6 @@ async def mint_and_bridge(
                                 f" Balance: {account_balance} {source_chain.token.symbol}")
                 logger.info(balance_info)
                 if account_balance == 0:
-                    logger.warning(balance_info)
                     continue
             zk_bridge = ZkBridgeAPI(session)
             try:
